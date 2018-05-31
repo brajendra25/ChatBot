@@ -1,0 +1,138 @@
+
+<html>
+    <head>
+        <title>Scanner</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+            crossorigin="anonymous">
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <style>
+          body {
+            font: 15px arial, sans-serif;
+            background-color: #d9d9d9;
+            padding-top: 15px;
+            padding-bottom: 15px;
+          }
+          
+          #bodybox {
+            margin: auto;
+            max-width: 550px;
+            font: 15px arial, sans-serif;
+            background-color: white;
+            border-style: solid;
+            border-width: 1px;
+            padding-top: 20px;
+            padding-bottom: 25px;
+            padding-right: 25px;
+            padding-left: 25px;
+            box-shadow: 5px 5px 5px grey;
+            border-radius: 15px;
+          }
+          
+          #chatborder {
+            border-style: solid;
+            background-color: #f6f9f6;
+            border-width: 3px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+            padding-top: 10px;
+            padding-bottom: 15px;
+            padding-right: 20px;
+            padding-left: 15px;
+            border-radius: 15px;
+            
+          }
+          #msgbox
+          {
+            max-height: 350px;
+            overflow: auto;
+          }
+          
+          .chatlog {
+             font: 15px arial, sans-serif;
+          }
+          
+          #chatbox {
+            font: 17px arial, sans-serif;
+            height: 22px;
+            width: 100%;
+          
+          }
+          
+          h1 {
+            margin: auto;
+          }
+          
+          pre {
+            background-color: #f0f0f0;
+            margin-left: 20px;
+          }
+          .activemsg{
+            background-color: rgb(218, 210, 210);
+             color: green 
+          }
+          </style>
+          
+    </head>
+
+<body style="background-color:cadetblue">
+  <div id='bodybox'>
+    <div id='chatborder'>
+      <div id="msgbox"></div>
+     <p id="chatlog2" class="chatlog">&nbsp;</p>
+      <p id="chatlog1" class="chatlog">&nbsp;</p>
+      <input type="text" name="chat" id="chatbox" placeholder="Hi there! Type here to talk to me." onfocus="placeHolder()">
+    </div>
+    <button id="btnSearch"  class="btn btn-primary">Send</button>
+    <button id="btnTrainData"  class="btn btn-primary">Train Data</button>
+  </div>
+    </body>
+    <script>
+    $("#btnTrainData").click(function(){
+      //alert('ok')
+      $.ajax({
+              url: 'trainChatBot',
+              dataType: 'json',
+            success: function (result) {
+                console.log(result)
+                if(result=="")
+                  result="No Records Found!!"
+              alert(result.chatbotData)
+          }
+        
+      });
+    });
+
+       $("#btnSearch").click(function(){
+        // alert($('#chatbox').val())
+           $.ajax({
+              url: 'letsChat',
+              data: {'userData': $('#chatbox').val()},
+              //dataType: 'json',
+            success: function (result) {
+                //console.log(result)
+                if(result=="")
+                  result="No Records Found!!"
+              //alert(result)
+              html = $("#msgbox").html() + result;
+              $("#msgbox").html(html)
+              $('#msgbox').scrollTop($('#msgbox').height())
+              $("#msgbox table" ).removeClass("activemsg");
+              $("#msgbox table:last" ).addClass("activemsg");
+              $("#msgbox table:last" ).focus();
+              //$("#tblmsg").addClass('green');
+              $('#chatbox').val("")
+          }
+        
+      });
+    });
+          </script>
+</html>
